@@ -34,6 +34,21 @@ Container that connects to an **OCI Distribution / Docker Registry HTTP API v2**
 docker build -t registry-cleanup:local .
 ```
 
+## Publishing (GitHub Releases → GHCR)
+
+When you [create a GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) and publish it, [`.github/workflows/release-ghcr.yml`](.github/workflows/release-ghcr.yml) builds the image and pushes to the GitHub Container Registry:
+
+- `ghcr.io/<owner>/<repo>:<release-tag>` — always (uses the release’s tag name, e.g. `v1.2.3`)
+- `ghcr.io/<owner>/<repo>:latest` — only for **non-prerelease** releases (avoids overwriting `latest` with a pre-release)
+
+The workflow uses `GITHUB_TOKEN`; ensure **Packages** write permission is allowed for workflows (default for new repos). The package may be **private** until you mark it public under the org’s Packages settings.
+
+Pull example:
+
+```bash
+docker pull ghcr.io/OWNER/docker-cleanup:v1.0.0
+```
+
 ## Example
 
 ```bash
