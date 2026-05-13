@@ -19,7 +19,7 @@ docker run --rm \
   ghcr.io/danielgtmn/docker-cleanup:latest
 ```
 
-`DELETE_ENABLED` defaults to `false`, so this only logs what *would* be deleted. Set it to `true` once you've verified the plan.
+`DELETE_ENABLED` defaults to `false`, so this only logs what _would_ be deleted. Set it to `true` once you've verified the plan.
 
 ## How it works
 
@@ -40,31 +40,31 @@ All configuration is via environment variables.
 
 ### Connection
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `REGISTRY_URL` | yes | — | Base URL, e.g. `https://registry.example.com` |
-| `REGISTRY_TOKEN` | one of auth | — | Bearer token for the registry API. |
-| `REGISTRY_USERNAME` / `REGISTRY_PASSWORD` | one of auth | — | HTTP Basic credentials (also used against the token endpoint when challenged). |
-| `REGISTRY_INSECURE_SKIP_TLS_VERIFY` | no | `false` | Disable TLS verification. **Dev/test only.** |
+| Variable                                  | Required    | Default | Description                                                                    |
+| ----------------------------------------- | ----------- | ------- | ------------------------------------------------------------------------------ |
+| `REGISTRY_URL`                            | yes         | —       | Base URL, e.g. `https://registry.example.com`                                  |
+| `REGISTRY_TOKEN`                          | one of auth | —       | Bearer token for the registry API.                                             |
+| `REGISTRY_USERNAME` / `REGISTRY_PASSWORD` | one of auth | —       | HTTP Basic credentials (also used against the token endpoint when challenged). |
+| `REGISTRY_INSECURE_SKIP_TLS_VERIFY`       | no          | `false` | Disable TLS verification. **Dev/test only.**                                   |
 
 ### Retention policy
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `RETENTION_COUNT` | yes | — | Per repository: number of newest eligible tags to keep (non-negative integer). |
-| `DELETE_ENABLED` | no | `false` | If `false`, dry-run only — logs the deletion plan without executing it. |
-| `REPOSITORIES` | no | catalog | Comma-separated repo names (e.g. `my/app,my/worker`). Falls back to `GET /v2/_catalog`. |
-| `IGNORE_REPOSITORY_PATTERNS` | no | — | Comma-separated [picomatch](https://github.com/micromatch/picomatch) globs; matching repos are skipped entirely. |
-| `IGNORE_TAG_PATTERNS` | no | — | Comma-separated picomatch globs; matching tags are always retained. |
+| Variable                     | Required | Default | Description                                                                                                      |
+| ---------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| `RETENTION_COUNT`            | yes      | —       | Per repository: number of newest eligible tags to keep (non-negative integer).                                   |
+| `DELETE_ENABLED`             | no       | `false` | If `false`, dry-run only — logs the deletion plan without executing it.                                          |
+| `REPOSITORIES`               | no       | catalog | Comma-separated repo names (e.g. `my/app,my/worker`). Falls back to `GET /v2/_catalog`.                          |
+| `IGNORE_REPOSITORY_PATTERNS` | no       | —       | Comma-separated [picomatch](https://github.com/micromatch/picomatch) globs; matching repos are skipped entirely. |
+| `IGNORE_TAG_PATTERNS`        | no       | —       | Comma-separated picomatch globs; matching tags are always retained.                                              |
 
 ### Scheduling & logging
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `CRON_EXPRESSION` | no | `0 3 * * *` | `node-cron` syntax. |
-| `TZ` | no | system | IANA timezone for the schedule (e.g. `Europe/Berlin`). |
-| `RUN_ONCE` | no | `false` | Run one cleanup and exit (no scheduler). |
-| `LOG_LEVEL` | no | `info` | `info` or `debug`. |
+| Variable          | Required | Default     | Description                                            |
+| ----------------- | -------- | ----------- | ------------------------------------------------------ |
+| `CRON_EXPRESSION` | no       | `0 3 * * *` | `node-cron` syntax.                                    |
+| `TZ`              | no       | system      | IANA timezone for the schedule (e.g. `Europe/Berlin`). |
+| `RUN_ONCE`        | no       | `false`     | Run one cleanup and exit (no scheduler).               |
+| `LOG_LEVEL`       | no       | `info`      | `info` or `debug`.                                     |
 
 ## Build from source
 
@@ -72,20 +72,7 @@ All configuration is via environment variables.
 docker build -t registry-cleanup:local .
 ```
 
-## Releases
-
-Published to GitHub Container Registry via [`release-ghcr.yml`](https://github.com/danielgtmn/docker-cleanup/blob/main/.github/workflows/release-ghcr.yml) on every GitHub Release:
-
-- `ghcr.io/danielgtmn/docker-cleanup:<release-tag>` — always (e.g. `v1.2.3`).
-- `ghcr.io/danielgtmn/docker-cleanup:latest` — only for non-prerelease releases.
-
-The workflow uses `GITHUB_TOKEN`, so the repository needs **Packages: write** enabled for workflows (default for new repos). Newly published packages are private until made public under the org's Packages settings.
-
-```bash
-docker pull ghcr.io/danielgtmn/docker-cleanup:v1.0.0
-```
-
-## Full example
+## Example
 
 ```bash
 docker run --rm \
